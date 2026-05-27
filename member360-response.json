@@ -1,0 +1,17 @@
+{
+  "memberId": "M001",
+  "memberName": "John Smith",
+  "dateOfBirth": "04/15/1984",
+  "status": "Active",
+  "lineOfBusiness": "NYM",
+  "planName": "Essential Plan",
+  "county": "Queens",
+  "phone": "(555) 111-2200",
+  "email": "john.smith@example.com",
+  "eligibility": {
+    "effectiveDate": "01/01/2026",
+    "terminationDate": "12/31/2026",
+    "primaryCareProvider": "Dr. Amanda Lee",
+    "pcpStatus": "Assigned"
+  }
+}

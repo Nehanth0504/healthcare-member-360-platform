@@ -1,0 +1,111 @@
+<template>
+    <lightning-card title="Healthcare Member 360 Platform" icon-name="standard:people">
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                    <lightning-input
+                        type="search"
+                        label="Search Member"
+                        placeholder="Search by Member ID or Member Name"
+                        value={searchKey}
+                        onchange={handleSearchKeyChange}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-m-top_large">
+                    <lightning-button label="Search" variant="brand" onclick={handleSearch}></lightning-button>
+                    <lightning-button class="slds-m-left_small" label="Clear" onclick={handleClear}></lightning-button>
+                </div>
+            </div>
+
+            <template if:true={isLoading}>
+                <div class="slds-m-top_medium">
+                    <lightning-spinner alternative-text="Loading member details"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={memberFound}>
+                <div class="slds-m-top_large">
+                    <section class="slds-box slds-theme_default slds-m-bottom_medium">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                <h2 class="slds-text-heading_medium">{member.memberName}</h2>
+                                <p>Member ID: {member.memberId}</p>
+                                <p>DOB: {member.dateOfBirth}</p>
+                                <p>Status: {member.status}</p>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                <p>Plan: {member.planName}</p>
+                                <p>Line of Business: {member.lineOfBusiness}</p>
+                                <p>County: {member.county}</p>
+                                <p>Email: {member.email}</p>
+                                <p>Phone: {member.phone}</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            <section class="slds-box slds-theme_default">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">Eligibility</h3>
+                                <p>Effective Date: {member.eligibility.effectiveDate}</p>
+                                <p>Termination Date: {member.eligibility.terminationDate}</p>
+                                <p>PCP: {member.eligibility.primaryCareProvider}</p>
+                                <p>PCP Status: {member.eligibility.pcpStatus}</p>
+                            </section>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            <section class="slds-box slds-theme_default">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">Care Gaps</h3>
+                                <template for:each={member.careGaps} for:item="gap">
+                                    <p key={gap}>• {gap}</p>
+                                </template>
+                            </section>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            <section class="slds-box slds-theme_default">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">Summary</h3>
+                                <p>Cases: {caseCount}</p>
+                                <p>Claims: {claimCount}</p>
+                                <p>Member Status: {member.status}</p>
+                            </section>
+                        </div>
+                    </div>
+
+                    <section class="slds-box slds-theme_default slds-m-top_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Recent Cases</h3>
+                        <lightning-datatable
+                            key-field="caseNumber"
+                            data={member.cases}
+                            columns={caseColumns}
+                            hide-checkbox-column>
+                        </lightning-datatable>
+                    </section>
+
+                    <section class="slds-box slds-theme_default slds-m-top_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Recent Claims</h3>
+                        <lightning-datatable
+                            key-field="claimNumber"
+                            data={member.claims}
+                            columns={claimColumns}
+                            hide-checkbox-column>
+                        </lightning-datatable>
+                    </section>
+                </div>
+            </template>
+
+            <template if:true={noMemberFound}>
+                <div class="slds-box slds-theme_default slds-m-top_medium">
+                    No member found. Try M001, M002, John, or Sarah.
+                </div>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-box slds-theme_error slds-m-top_medium">{error}</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
